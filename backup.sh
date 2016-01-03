@@ -1,6 +1,7 @@
 #!/system/bin/sh
 # will not work with marshmallow due to SDcard directory name
 # works with TWRP recovery. did not try with other recovery methods.
+# next update to include app data backup
 if [ $1 = "-b" ]; then
     echo copying whatsapp files...
     mkdir -p /external_sd/backup/WhatsApp
