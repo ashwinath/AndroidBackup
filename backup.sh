@@ -1,5 +1,4 @@
-#!/system/bin/sh
-# will not work with marshmallow due to SDcard directory name
+#!/sbin/sh
 # works with TWRP recovery. did not try with other recovery methods.
 # /data/data experimental!!! have not tested.
 # issues that may arise, overcopying useless system app data; may not be harmful
@@ -26,8 +25,8 @@ elif [ $1 = "-r" ]; then
     mkdir /data/app
     cp -r /external_sd/backup/app /data
     echo extracting tar file
-    mkdir /data/data
-    tar -xf /external_sd/backup/backup.tar -C /data
+    mkdir -p /data/data
+    tar -xf /external_sd/backup/backup.tar
     echo done!
 else
     echo -b for backup and -r for restore
