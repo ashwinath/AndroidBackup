@@ -1,7 +1,8 @@
 #!/system/bin/sh
 # will not work with marshmallow due to SDcard directory name
 # works with TWRP recovery. did not try with other recovery methods.
-# next update to include app data backup
+# /data/data experimental!!! have not tested.
+# issues that may arise, overcopying useless system app data; may not be harmful
 if [ $1 = "-b" ]; then
     echo copying whatsapp files...
     mkdir -p /external_sd/backup/WhatsApp
@@ -12,6 +13,8 @@ if [ $1 = "-b" ]; then
     echo copying apps...
     mkdir /external_sd/backup/app
     cp -r /data/app /external_sd/backup
+    echo zipping /data/data into tar file
+    tar -c -f /external_sd/backup/backup.tar /data/data
     echo done!
 elif [ $1 = "-r" ]; then
     echo restoring whatsapp files...
@@ -22,6 +25,9 @@ elif [ $1 = "-r" ]; then
     echo restoring apps...
     mkdir /data/app
     cp -r /external_sd/backup/app /data
+    echo extracting tar file
+    mkdir /data/data
+    tar -xf /external_sd/backup/backup.tar -C /data
     echo done!
 else
     echo -b for backup and -r for restore
