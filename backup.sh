@@ -1,33 +1,20 @@
 #!/sbin/sh
-# works with TWRP recovery. did not try with other recovery methods.
-# /data/data experimental!!! have not tested.
-# issues that may arise, overcopying useless system app data; may not be harmful
-if [ $1 = "-b" ]; then
-    echo copying whatsapp files...
-    mkdir -p /external_sd/backup/WhatsApp
-    cp -r /sdcard/WhatsApp /external_sd/backup
-    echo copying photos...
-    mkdir -p /external_sd/backup/DCIM
-    cp -r /sdcard/DCIM /external_sd/backup
-    echo copying apps...
-    mkdir /external_sd/backup/app
-    cp -r /data/app /external_sd/backup
-    echo zipping /data/data into tar file
-    tar -c -f /external_sd/backup/backup.tar /data/data
+# put all backup files into one tar file.
+# unsure if /data/data actually backs up app data
+# unsure if copying all of /data/data is harmful
+
+if [[ $1 = "-b" ]]; then
+    echo backing up...
+    if [[ -ne /external_sd/backup ]]; then
+        mkdir -p /external_sd/backup
+    fi
+    tar -c -f /external_sd/backup/backup.tar /data/data /data/app /sdcard/DCIM /sdcard/WhatsApp
     echo done!
-elif [ $1 = "-r" ]; then
-    echo restoring whatsapp files...
-    mkdir -p /sdcard/WhatsApp
-    cp -r /external_sd/backup/WhatsApp /sdcard
-    echo restoring photos...
-    cp -r /external_sd/backup/DCIM /sdcard
-    echo restoring apps...
-    mkdir /data/app
-    cp -r /external_sd/backup/app /data
-    echo extracting tar file
-    mkdir -p /data/data
+elif [[ $1 = "-r" ]]; then
+    echo restoring...
     tar -xf /external_sd/backup/backup.tar
     echo done!
 else
-    echo -b for backup and -r for restore
+    echo -b for backup
+    echo -r for restore
 fi
